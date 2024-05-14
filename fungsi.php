@@ -13,8 +13,8 @@ function getKriteriaID($no_urut)
     return $listID[($no_urut)];
 }
 
-// mencari ID karyawan
-function getKaryawanID($no_urut)
+// mencari ID guru
+function getGuruID($no_urut)
 {
     include('config.php');
     $query  = "SELECT id FROM guru ORDER BY id";
@@ -42,7 +42,7 @@ function getKriteriaNama($no_urut)
 }
 
 // mencari nama karyawan
-function getKaryawanNama($no_urut)
+function getGuruNama($no_urut)
 {
     include('config.php');
     $query  = "SELECT nama FROM guru ORDER BY id";
@@ -56,10 +56,10 @@ function getKaryawanNama($no_urut)
 }
 
 // mencari priority vector karyawan
-function getKaryawanPV($id_karyawan, $id_kriteria, $id_periode)
+function getGuruPV($id_guru, $id_kriteria, $id_periode)
 {
     include('config.php');
-    $query = "SELECT nilai FROM pv_karyawan WHERE id_periode=$id_periode AND id_karyawan=$id_karyawan AND id_kriteria=$id_kriteria";
+    $query = "SELECT nilai FROM pv_karyawan WHERE id_periode=$id_periode AND id_karyawan=$id_guru AND id_kriteria=$id_kriteria";
     $result = mysqli_query($koneksi, $query);
 
     $pv = 0;
@@ -87,7 +87,7 @@ function getKriteriaPV($id_kriteria, $id_periode)
 }
 
 // mencari jumlah karyawan
-function getJumlahKaryawan()
+function getJumlahGuru()
 {
     include('config.php');
     $query  = "SELECT count(*) FROM guru";
@@ -166,18 +166,18 @@ function deleteKriteria($id)
     mysqli_query($koneksi, $query);
 
     // hapus record dari tabel pv_karyawan
-    $query = "DELETE FROM pv_karyawan WHERE id_kriteria=$id";
+    $query = "DELETE FROM pv_guru WHERE id_kriteria=$id";
     mysqli_query($koneksi, $query);
 
     $query = "DELETE FROM perbandingan_kriteria WHERE kriteria1=$id OR kriteria2=$id";
     mysqli_query($koneksi, $query);
 
-    $query = "DELETE FROM perbandingan_karyawan WHERE pembanding=$id";
+    $query = "DELETE FROM perbandingan_guru WHERE pembanding=$id";
     mysqli_query($koneksi, $query);
 }
 
 // hapus karyawan
-function deleteKaryawan($id)
+function deleteGuru($id)
 {
     include('config.php');
 
@@ -249,11 +249,11 @@ function inputKriteriaPV($id_kriteria, $pv, $id_periode)
 }
 
 // memasukkan nilai priority vektor karyawan
-function inputKaryawanPV($id_karyawan, $id_kriteria, $pv, $id_periode)
+function inputGuruPV($id_karyawan, $id_kriteria, $pv, $id_periode)
 {
     include('config.php');
 
-    $query = "SELECT * FROM pv_karyawan WHERE id_periode = $id_periode AND id_karyawan = $id_karyawan AND id_kriteria = $id_kriteria";
+    $query = "SELECT * FROM pv_guru WHERE id_periode = $id_periode AND id_guru = $id_karyawan AND id_kriteria = $id_kriteria";
     $result = mysqli_query($koneksi, $query);
 
     if (!$result) {
@@ -264,9 +264,9 @@ function inputKaryawanPV($id_karyawan, $id_kriteria, $pv, $id_periode)
     // jika result kosong maka masukkan data baru
     // jika telah ada maka diupdate
     if (mysqli_num_rows($result) == 0) {
-        $query = "INSERT INTO pv_karyawan (id_karyawan,id_kriteria,nilai,id_periode) VALUES ($id_karyawan,$id_kriteria,$pv,$id_periode)";
+        $query = "INSERT INTO pv_guru (id_guru,id_kriteria,nilai,id_periode) VALUES ($id_karyawan,$id_kriteria,$pv,$id_periode)";
     } else {
-        $query = "UPDATE pv_karyawan SET nilai=$pv WHERE id_periode=$id_periode AND id_karyawan=$id_karyawan AND id_kriteria=$id_kriteria";
+        $query = "UPDATE pv_guru SET nilai=$pv WHERE id_periode=$id_periode AND id_guru=$id_karyawan AND id_kriteria=$id_kriteria";
     }
 
     $result = mysqli_query($koneksi, $query);
@@ -311,15 +311,15 @@ function inputDataPerbandinganKriteria($kriteria1, $kriteria2, $nilai, $nilai_ke
 }
 
 // memasukkan bobot nilai perbandingan karyawan
-function inputDataPerbandinganKaryawan($karyawan1, $karyawan2, $pembanding, $nilai, $nilai_kepentingan, $id_periode)
+function inputDataPerbandinganGuru($karyawan1, $karyawan2, $pembanding, $nilai, $nilai_kepentingan, $id_periode)
 {
     include('config.php');
 
-    $id_karyawan1 = getKaryawanID($karyawan1);
-    $id_karyawan2 = getKaryawanID($karyawan2);
+    $id_karyawan1 = getGuruID($karyawan1);
+    $id_karyawan2 = getGuruID($karyawan2);
     $id_pembanding = getKriteriaID($pembanding);
 
-    $query = "SELECT * FROM perbandingan_karyawan WHERE id_periode = $id_periode AND karyawan1 = $id_karyawan1 AND karyawan2 = $id_karyawan2 AND pembanding = $id_pembanding";
+    $query = "SELECT * FROM perbandingan_guru WHERE id_periode = $id_periode AND guru1 = $id_karyawan1 AND guru2 = $id_karyawan2 AND pembanding = $id_pembanding";
     $result = mysqli_query($koneksi, $query);
 
     if (!$result) {
@@ -332,9 +332,9 @@ function inputDataPerbandinganKaryawan($karyawan1, $karyawan2, $pembanding, $nil
     // jika result kosong maka masukkan data baru
     // jika telah ada maka diupdate
     if (mysqli_num_rows($result) == 0) {
-        $query = "INSERT INTO perbandingan_karyawan (karyawan1,karyawan2,pembanding,penting,nilai_kepentingan,nilai,id_periode) VALUES ($id_karyawan1,$id_karyawan2,$id_pembanding,$penting,$nilai_kepentingan,$nilai,$id_periode)";
+        $query = "INSERT INTO perbandingan_guru (guru1,guru2,pembanding,penting,nilai_kepentingan,nilai,id_periode) VALUES ($id_karyawan1,$id_karyawan2,$id_pembanding,$penting,$nilai_kepentingan,$nilai,$id_periode)";
     } else {
-        $query = "UPDATE perbandingan_karyawan SET penting=$penting,nilai_kepentingan=$nilai_kepentingan,nilai=$nilai WHERE id_periode=$id_periode AND karyawan1=$id_karyawan1 AND karyawan2=$id_karyawan2 AND pembanding=$id_pembanding";
+        $query = "UPDATE perbandingan_guru SET penting=$penting,nilai_kepentingan=$nilai_kepentingan,nilai=$nilai WHERE id_periode=$id_periode AND guru1=$id_karyawan1 AND guru2=$id_karyawan2 AND pembanding=$id_pembanding";
     }
 
     $result = mysqli_query($koneksi, $query);
@@ -380,15 +380,15 @@ function getNilaiPerbandinganKriteria($kriteria1, $kriteria2, $id_periode)
 }
 
 // mencari nilai bobot perbandingan karyawan
-function getNilaiPerbandinganKaryawan($karyawan1, $karyawan2, $pembanding, $id_periode)
+function getNilaiPerbandinganGuru($guru1, $guru2, $pembanding, $id_periode)
 {
     include('config.php');
 
-    $id_karyawan1 = getKaryawanID($karyawan1);
-    $id_karyawan2 = getKaryawanID($karyawan2);
+    $id_guru1 = getGuruID($guru1);
+    $id_guru2 = getGuruID($guru2);
     $id_pembanding = getKriteriaID($pembanding);
 
-    $query = "SELECT * FROM perbandingan_karyawan WHERE id_periode = $id_periode AND karyawan1 = $id_karyawan1 AND karyawan2 = $id_karyawan2 AND pembanding = $id_pembanding";
+    $query = "SELECT * FROM perbandingan_guru WHERE id_periode = $id_periode AND guru1 = $id_guru1 AND guru2 = $id_guru2 AND pembanding = $id_pembanding";
     $result = mysqli_query($koneksi, $query);
 
     if (!$result) {
@@ -465,7 +465,7 @@ function showTabelPerbandingan($jenis, $kriteria, $id_periode)
     if ($kriteria == 'kriteria') {
         $n = getJumlahKriteria();
     } else {
-        $n = getJumlahKaryawan();
+        $n = getJumlahGuru();
     }
 
     $query = "SELECT * FROM $kriteria ORDER BY id";
@@ -511,7 +511,7 @@ function showTabelPerbandingan($jenis, $kriteria, $id_periode)
                             $checked1 = $penting == $pilihan[$x]['id'] ? 'checked' : '';
                             $checked2 = $penting == $pilihan[$y]['id'] ? 'checked' : '';
                         } else {
-                            $res = getNilaiPerbandinganKaryawan($x, $y, ($jenis - 1), $id_periode);
+                            $res = getNilaiPerbandinganGuru($x, $y, ($jenis - 1), $id_periode);
                             $penting = $res['penting'];
                             $nilai_kepentingan = $res['nilai_kepentingan'];
                             $checked1 = $penting == $pilihan[$x]['id'] ? 'checked' : '';

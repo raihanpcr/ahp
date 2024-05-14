@@ -18,7 +18,7 @@ include('header.php');
                                     <th>Kriteria</th>
                                     <?php
                                     for ($i = 0; $i <= ($n - 1); $i++) {
-                                        echo "<th>" . getKaryawanNama($i) . "</th>";
+                                        echo "<th>" . getGuruNama($i) . "</th>";
                                     }
                                     ?>
                                 </tr>
@@ -27,7 +27,7 @@ include('header.php');
                                 <?php
                                 for ($x = 0; $x <= ($n - 1); $x++) {
                                     echo "<tr>";
-                                    echo "<td>" . getKaryawanNama($x) . "</td>";
+                                    echo "<td>" . getGuruNama($x) . "</td>";
                                     for ($y = 0; $y <= ($n - 1); $y++) {
                                         echo "<td>" . round($matrik[$x][$y], 5) . "</td>";
                                     }
@@ -55,7 +55,7 @@ include('header.php');
                                     <th>Kriteria</th>
                                     <?php
                                     for ($i = 0; $i <= ($n - 1); $i++) {
-                                        echo "<th>" . getKaryawanNama($i) . "</th>";
+                                        echo "<th>" . getGuruNama($i) . "</th>";
                                     }
                                     ?>
                                     <th>Jumlah</th>
@@ -66,7 +66,7 @@ include('header.php');
                                 <?php
                                 for ($x = 0; $x <= ($n - 1); $x++) {
                                     echo "<tr>";
-                                    echo "<td>" . getKaryawanNama($x) . "</td>";
+                                    echo "<td>" . getGuruNama($x) . "</td>";
                                     for ($y = 0; $y <= ($n - 1); $y++) {
                                         echo "<td>" . round($matrikb[$x][$y], 5) . "</td>";
                                     }

@@ -14,7 +14,7 @@ if (isset($_POST['submit'])) {
     if ($jenis == 'kriteria') {
         $n = getJumlahKriteria();
     } else {
-        $n = getJumlahKaryawan();
+        $n = getJumlahGuru();
     }
 
     // memetakan nilai ke dalam bentuk matrik
@@ -39,7 +39,7 @@ if (isset($_POST['submit'])) {
             if ($jenis == 'kriteria') {
                 inputDataPerbandinganKriteria($x, $y, $matrik[$x][$y], $_POST[$bobot], $id_periode);
             } else {
-                inputDataPerbandinganKaryawan($x, $y, ($jenis - 1), $matrik[$x][$y], $_POST[$bobot], $id_periode);
+                inputDataPerbandinganGuru($x, $y, ($jenis - 1), $matrik[$x][$y], $_POST[$bobot], $id_periode);
             }
         }
     }
@@ -83,8 +83,8 @@ if (isset($_POST['submit'])) {
             inputKriteriaPV($id_kriteria, $pv[$x], $id_periode);
         } else {
             $id_kriteria = getKriteriaID($jenis - 1);
-            $id_karyawan = getKaryawanID($x);
-            inputKaryawanPV($id_karyawan, $id_kriteria, $pv[$x], $id_periode);
+            $id_guru = getGuruID($x);
+            inputGuruPV($id_guru, $id_kriteria, $pv[$x], $id_periode);
         }
     }
 

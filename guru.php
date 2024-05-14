@@ -14,7 +14,7 @@ if (isset($_POST['edit'])) {
 // menjalankan perintah delete
 if (isset($_POST['delete'])) {
     $id = $_POST['id'];
-    deleteKaryawan($id);
+    deleteGuru($id);
 }
 
 // menjalankan perintah tambah

@@ -15,7 +15,7 @@ $result = mysqli_query($koneksi, $query);
 if (mysqli_num_rows($result) > 0) {
     // menghitung perangkingan
     $jmlKriteria = getJumlahKriteria();
-    $jmlKaryawan = getJumlahKaryawan();
+    $jmlKaryawan = getJumlahGuru();
     $nilai = array();
 
     // mendapatkan nilai tiap karyawan
@@ -24,10 +24,10 @@ if (mysqli_num_rows($result) > 0) {
         $nilai[$x] = 0;
 
         for ($y = 0; $y <= ($jmlKriteria - 1); $y++) {
-            $id_karyawan = getKaryawanID($x);
+            $id_karyawan = getGuruID($x);
             $id_kriteria = getKriteriaID($y);
 
-            $pv_karyawan = getKaryawanPV($id_karyawan, $id_kriteria, $id_periode);
+            $pv_karyawan = getGuruPV($id_karyawan, $id_kriteria, $id_periode);
             $pv_kriteria = getKriteriaPV($id_kriteria, $id_periode);
 
             $nilai[$x] += ($pv_karyawan * $pv_kriteria);
@@ -36,7 +36,7 @@ if (mysqli_num_rows($result) > 0) {
 
     // update nilai ranking
     for ($i = 0; $i <= ($jmlKaryawan - 1); $i++) {
-        $id_karyawan = getKaryawanID($i);
+        $id_karyawan = getGuruID($i);
 
         $query = "SELECT * FROM ranking WHERE id_karyawan=$id_karyawan AND id_periode=$id_periode";
         $result = mysqli_query($koneksi, $query);
@@ -84,8 +84,8 @@ include('header.php');
                                         <th>Priority Vector (rata-rata)</th>
                                         <?php
                                         echo "fira test";
-                                        for ($i = 0; $i <= (getJumlahKaryawan() - 1); $i++) {
-                                            echo "<th>" . getKaryawanNama($i) . "</th>\n";
+                                        for ($i = 0; $i <= (getJumlahGuru() - 1); $i++) {
+                                            echo "<th>" . getGuruNama($i) . "</th>\n";
                                         }
                                         ?>
                                     </tr>
@@ -98,8 +98,8 @@ include('header.php');
                                         echo "<td>" . getKriteriaNama($x) . "</td>";
                                         echo "<td>" . round(getKriteriaPV(getKriteriaID($x), $id_periode), 5) . "</td>";
 
-                                        for ($y = 0; $y <= (getJumlahKaryawan() - 1); $y++) {
-                                            echo "<td>" . round(getKaryawanPV(getKaryawanID($y), getKriteriaID($x), $id_periode), 5) . "</td>";
+                                        for ($y = 0; $y <= (getJumlahGuru() - 1); $y++) {
+                                            echo "<td>" . round(getGuruPV(getGuruID($y), getKriteriaID($x), $id_periode), 5) . "</td>";
                                         }
 
                                         echo "</tr>";
