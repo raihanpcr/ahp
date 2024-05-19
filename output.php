@@ -13,6 +13,7 @@ include('header.php');
                     </div>
                     <div class="card-body">
                         <table class="table">
+                            <!-- Table Matriks Perbandingan Berpasangan Kriteria -->
                             <thead>
                                 <tr>
                                     <th>Kriteria</th>
@@ -48,6 +49,7 @@ include('header.php');
 
                         <br>
 
+                        <!-- Tabel Matriks Nilai kriteria -->
                         <h3>Matriks Nilai Kriteria</h3>
                         <table class="table">
                             <thead>
@@ -55,6 +57,7 @@ include('header.php');
                                     <th>Kriteria</th>
                                     <?php
                                     for ($i = 0; $i <= ($n - 1); $i++) {
+                                        //mengambil nama dari kriteria (db_tbl -> kriteria)
                                         echo "<th>" . getKriteriaNama($i) . "</th>";
                                     }
                                     ?>

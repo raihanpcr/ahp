@@ -7,7 +7,7 @@ include('fungsi.php');
 if (isset($_POST['edit'])) {
     $id = $_POST['id'];
 
-    header('Location: edit.php?jenis=karyawan&id=' . $id);
+    header('Location: edit.php?jenis=guru&id=' . $id);
     exit();
 }
 
@@ -20,7 +20,7 @@ if (isset($_POST['delete'])) {
 // menjalankan perintah tambah
 if (isset($_POST['tambah'])) {
     $nama = $_POST['nama'];
-    tambahData('karyawan', $nama);
+    tambahData('guru', $nama);
 }
 
 include('header.php');

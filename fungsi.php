@@ -59,7 +59,7 @@ function getGuruNama($no_urut)
 function getGuruPV($id_guru, $id_kriteria, $id_periode)
 {
     include('config.php');
-    $query = "SELECT nilai FROM pv_karyawan WHERE id_periode=$id_periode AND id_karyawan=$id_guru AND id_kriteria=$id_kriteria";
+    $query = "SELECT nilai FROM pv_guru WHERE id_periode=$id_periode AND id_guru=$id_guru AND id_kriteria=$id_kriteria";
     $result = mysqli_query($koneksi, $query);
 
     $pv = 0;
@@ -523,7 +523,9 @@ function showTabelPerbandingan($jenis, $kriteria, $id_periode)
                                 <div>
                                     <div class="form-group">
                                         <input name="pilih<?php echo $urut ?>" value="1" <?php echo $checked1; ?> class="hidden" type="radio" required>
+                                        <!-- nampilin nama guru -> $pilihan[$x]['nama'] -->
                                         <label><?php echo $pilihan[$x]['nama']; ?></label>
+
                                     </div>
                                 </div>
                             </td>
@@ -532,6 +534,7 @@ function showTabelPerbandingan($jenis, $kriteria, $id_periode)
                                     <div class="form-group">
                                         <input name="pilih<?php echo $urut ?>" value="2" <?php echo $checked2; ?> class="hidden" type="radio" required>
                                         <label><?php echo $pilihan[$y]['nama']; ?></label>
+
                                     </div>
                                 </div>
                             </td>

@@ -5,14 +5,21 @@ include('fungsi.php');
 
 if (isset($_GET['id'])) {
     $id_periode = $_GET['id'];
+
     $query = "SELECT * FROM periode WHERE id=$id_periode";
+
     $result = mysqli_query($koneksi, $query);
+
     $periode = mysqli_fetch_array($result);
 }
-
+//nampilin data pada tbl_ranking
 $query = "SELECT * FROM ranking WHERE id_periode=$id_periode";
 $result = mysqli_query($koneksi, $query);
-if (mysqli_num_rows($result) > 0) {
+
+// $jmlKriteria = getJumlahKriteria();
+// $jmlKaryawan = getJumlahGuru();
+
+if (mysqli_num_rows($result) >= 0) {
     // menghitung perangkingan
     $jmlKriteria = getJumlahKriteria();
     $jmlKaryawan = getJumlahGuru();
@@ -33,26 +40,63 @@ if (mysqli_num_rows($result) > 0) {
             $nilai[$x] += ($pv_karyawan * $pv_kriteria);
         }
     }
-
+    // echo "<pre>";
+    // var_dump($nilai);
+    // die();
+    // echo "</pre>";
     // update nilai ranking
-    for ($i = 0; $i <= ($jmlKaryawan - 1); $i++) {
-        $id_karyawan = getGuruID($i);
 
-        $query = "SELECT * FROM ranking WHERE id_karyawan=$id_karyawan AND id_periode=$id_periode";
+    for ($i = 0; $i <= ($jmlKaryawan - 1); $i++) {
+        $id_guru = getGuruID($i);
+
+        $query = "SELECT * FROM ranking WHERE id_guru=$id_guru AND id_periode=$id_periode";
         $result = mysqli_query($koneksi, $query);
-        if (mysqli_num_rows($result) == 0) {
-            $query2 = "INSERT INTO ranking (id_karyawan, nilai, id_periode) VALUES ($id_karyawan, $nilai[$i], $id_periode)";
-        } else {
-            $query2 = "UPDATE ranking SET nilai=$nilai[$i] WHERE id_karyawan=$id_karyawan AND id_periode=$id_periode";
+
+        // Periksa apakah query SELECT berhasil
+        if (!$result) {
+            echo "Error pada query SELECT: " . mysqli_error($koneksi);
+            exit();
         }
 
-        $result = mysqli_query($koneksi, $query2);
-        if (!$result) {
-            echo "Gagal mengupdate ranking";
+        // Menggunakan mysqli_num_rows hanya jika $result adalah objek mysqli_result
+        if (mysqli_num_rows($result) == 0) {
+            $query2 = "INSERT INTO ranking (id_guru, nilai, id_periode) VALUES ($id_guru, $nilai[$i], $id_periode)";
+        } else {
+            $query2 = "UPDATE ranking SET nilai=$nilai[$i] WHERE id_guru=$id_guru AND id_periode=$id_periode";
+        }
+
+        // Jalankan query INSERT atau UPDATE dan periksa apakah berhasil
+        $result2 = mysqli_query($koneksi, $query2);
+        if (!$result2) {
+            echo "Gagal mengupdate ranking: " . mysqli_error($koneksi);
             exit();
         }
     }
+
+    // for ($i = 0; $i <= ($jmlKaryawan - 1); $i++) {
+    //     $id_karyawan = getGuruID($i);
+
+    //     $query = "SELECT * FROM ranking WHERE id_karyawan=$id_karyawan AND id_periode=$id_periode";
+    //     $result = mysqli_query($koneksi, $query);
+
+    //     if (mysqli_num_rows($result) == 0) {
+    //         $query2 = "INSERT INTO ranking (id_karyawan, nilai, id_periode) VALUES ($id_karyawan, $nilai[$i], $id_periode)";
+    //     } else {
+    //         $query2 = "UPDATE ranking SET nilai=$nilai[$i] WHERE id_karyawan=$id_karyawan AND id_periode=$id_periode";
+    //     }
+
+    //     $result = mysqli_query($koneksi, $query2);
+    //     if (!$result) {
+    //         echo "Gagal mengupdate ranking";
+    //         exit();
+    //     }
+    // }
 }
+
+// echo "<pre>";
+// var_dump($jmlKaryawan, $jmlKriteria);
+// die();
+// echo "</pre>";
 
 include('header.php');
 
@@ -131,7 +175,7 @@ include('header.php');
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $query  = "SELECT id,nama,id_karyawan,nilai FROM guru,ranking WHERE ranking.id_periode=$id_periode AND guru.id = ranking.id_karyawan ORDER BY nilai DESC";
+                                    $query  = "SELECT * FROM guru,ranking WHERE ranking.id_periode=$id_periode AND guru.id = ranking.id_guru ORDER BY nilai DESC";
                                     $result = mysqli_query($koneksi, $query);
 
                                     $i = 0;

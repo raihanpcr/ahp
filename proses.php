@@ -10,16 +10,23 @@ if (isset($_POST['submit'])) {
     $result = mysqli_query($koneksi, $query);
     $periode = mysqli_fetch_array($result);
 
+    // echo "<pre>";
+    // echo "periode -> " . var_dump($periode);
+    // die();
+    // echo "</pre>";
+
     // jumlah kriteria
     if ($jenis == 'kriteria') {
+        //ngambil jumlah kriteria
         $n = getJumlahKriteria();
     } else {
+        //ngambil jumlah kriteria
         $n = getJumlahGuru();
     }
 
-    // memetakan nilai ke dalam bentuk matrik
-    // x = baris
-    // y = kolom
+
+
+    // memetakan nilai ke dalam bentuk matrik x = baris,y = kolom
     $matrik = array();
     $urut     = 0;
 
@@ -70,7 +77,14 @@ if (isset($_POST['submit'])) {
     for ($x = 0; $x <= ($n - 1); $x++) {
         for ($y = 0; $y <= ($n - 1); $y++) {
             $matrikb[$x][$y] = $matrik[$x][$y] / $jmlmpb[$y];
+
+            // echo "<pre>";
+            // var_dump($matrikb[$x][$y]);
+            // die();
+            // echo "</pre>";
+
             $value = $matrikb[$x][$y];
+
             $jmlmnk[$x] += $value;
         }
 
@@ -92,6 +106,11 @@ if (isset($_POST['submit'])) {
     $eigenvektor = getEigenVector($jmlmpb, $jmlmnk, $n);
     $consIndex = getConsIndex($jmlmpb, $jmlmnk, $n);
     $consRatio = getConsRatio($jmlmpb, $jmlmnk, $n);
+
+    // echo "<pre>";
+    // var_dump($eigenvektor, $consIndex, $consRatio);
+    // die();
+    // echo "</pre>";
 
     if ($jenis == 'kriteria') {
         include('output.php');
