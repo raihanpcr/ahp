@@ -1,6 +1,7 @@
 <div class="sidebar" data-color="green" data-background-color="white" data-image="assets/template/img/sidebar-1.jpg">
-    <div class="logo">
-        <a href="index.php" class="simple-text logo-normal">SMAN 1 Bukit Batu</a>
+    <div class="logo text-center">
+        <img src="assets/images/sman_assets.png" class="" alt="">
+        <a href="index.php" class="simple-text logo-normal"> SMAN 1 Bukit Batu</a>
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
@@ -83,5 +84,9 @@
                 </li>
             <?php endif; ?>
         </ul>
+
+
+
     </div>
+
 </div>

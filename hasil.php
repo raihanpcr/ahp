@@ -37,13 +37,22 @@ if (mysqli_num_rows($result) >= 0) {
             $pv_karyawan = getGuruPV($id_karyawan, $id_kriteria, $id_periode);
             $pv_kriteria = getKriteriaPV($id_kriteria, $id_periode);
 
+            // echo "<pre>";
+            // echo $pv_karyawan . " guru<br>";
+            // echo $pv_kriteria . " kriteria<br>";
+            // echo $id_karyawan . "<br>";
+            // echo $id_kriteria;
+            // echo "</pre>";
+
             $nilai[$x] += ($pv_karyawan * $pv_kriteria);
         }
     }
+
     // echo "<pre>";
-    // var_dump($nilai);
+    // var_dump($pv_karyawan, $pv_kriteria);
     // die();
     // echo "</pre>";
+
     // update nilai ranking
 
     for ($i = 0; $i <= ($jmlKaryawan - 1); $i++) {
