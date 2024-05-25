@@ -8,7 +8,14 @@
             <li class="nav-item">
                 <a class="nav-link" href="index.php">
                     <i class="material-icons">home</i>
-                    <p>Home</p>
+                    <p>Beranda</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="dashboard.php">
+                    <i class="material-icons">dashboard</i>
+                    <p>Dashboard</p>
                 </a>
             </li>
 
@@ -48,6 +55,7 @@
                 </li>
                 <!-- osis -->
             <?php elseif ($_SESSION['LOG_ROLE'] == 'Osis') : ?>
+
                 <li class="nav-item">
                     <a class="nav-link" href="periode.php">
                         <i class="material-icons">schedule</i>
