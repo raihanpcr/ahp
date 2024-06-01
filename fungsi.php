@@ -1,4 +1,5 @@
 <?php
+
 // mencari ID kriteria
 function getKriteriaID($no_urut)
 {
@@ -41,7 +42,7 @@ function getKriteriaNama($no_urut)
     return $nama[($no_urut)];
 }
 
-// mencari nama karyawan
+// mencari nama guru
 function getGuruNama($no_urut)
 {
     include('config.php');
@@ -55,7 +56,7 @@ function getGuruNama($no_urut)
     return $nama[($no_urut)];
 }
 
-// mencari priority vector karyawan
+// mencari priority vector guru
 function getGuruPV($id_guru, $id_kriteria, $id_periode)
 {
     include('config.php');
@@ -86,7 +87,7 @@ function getKriteriaPV($id_kriteria, $id_periode)
     return $pv;
 }
 
-// mencari jumlah karyawan
+// mencari jumlah guru
 function getJumlahGuru()
 {
     include('config.php');
@@ -112,7 +113,7 @@ function getJumlahKriteria()
     return $jmlData;
 }
 
-// menambah data kriteria / karyawan
+// menambah data kriteria / guru
 function tambahData($tabel, $nama)
 {
     include('config.php');
@@ -165,7 +166,7 @@ function deleteKriteria($id)
     $query = "DELETE FROM pv_kriteria WHERE id_kriteria=$id";
     mysqli_query($koneksi, $query);
 
-    // hapus record dari tabel pv_karyawan
+    // hapus record dari tabel pv_guru
     $query = "DELETE FROM pv_guru WHERE id_kriteria=$id";
     mysqli_query($koneksi, $query);
 
@@ -176,16 +177,16 @@ function deleteKriteria($id)
     mysqli_query($koneksi, $query);
 }
 
-// hapus karyawan
+// hapus guru
 function deleteGuru($id)
 {
     include('config.php');
 
-    // hapus record dari tabel karyawan
+    // hapus record dari tabel guru
     $query = "DELETE FROM guru WHERE id=$id";
     mysqli_query($koneksi, $query);
 
-    // hapus record dari tabel pv_karyawan
+    // hapus record dari tabel pv_guru
     $query = "DELETE FROM pv_guru WHERE id_guru=$id";
     mysqli_query($koneksi, $query);
 
@@ -201,7 +202,7 @@ function deleteUser($id)
 {
     include('config.php');
 
-    // hapus record dari tabel karyawan
+    // hapus record dari tabel guru
     $query = "DELETE FROM user WHERE id=$id";
     mysqli_query($koneksi, $query);
 }
@@ -210,7 +211,7 @@ function deletePeriode($id)
 {
     include('config.php');
 
-    // hapus record dari tabel karyawan
+    // hapus record dari tabel guru
     $query = "DELETE FROM periode WHERE id=$id";
     mysqli_query($koneksi, $query);
 }
@@ -248,12 +249,12 @@ function inputKriteriaPV($id_kriteria, $pv, $id_periode)
     }
 }
 
-// memasukkan nilai priority vektor karyawan
-function inputGuruPV($id_karyawan, $id_kriteria, $pv, $id_periode)
+// memasukkan nilai priority vektor guru
+function inputGuruPV($id_guru, $id_kriteria, $pv, $id_periode)
 {
     include('config.php');
 
-    $query = "SELECT * FROM pv_guru WHERE id_periode = $id_periode AND id_guru = $id_karyawan AND id_kriteria = $id_kriteria";
+    $query = "SELECT * FROM pv_guru WHERE id_periode = $id_periode AND id_guru = $id_guru AND id_kriteria = $id_kriteria";
     $result = mysqli_query($koneksi, $query);
 
     if (!$result) {
@@ -264,14 +265,14 @@ function inputGuruPV($id_karyawan, $id_kriteria, $pv, $id_periode)
     // jika result kosong maka masukkan data baru
     // jika telah ada maka diupdate
     if (mysqli_num_rows($result) == 0) {
-        $query = "INSERT INTO pv_guru (id_guru,id_kriteria,nilai,id_periode) VALUES ($id_karyawan,$id_kriteria,$pv,$id_periode)";
+        $query = "INSERT INTO pv_guru (id_guru,id_kriteria,nilai,id_periode) VALUES ($id_guru,$id_kriteria,$pv,$id_periode)";
     } else {
-        $query = "UPDATE pv_guru SET nilai=$pv WHERE id_periode=$id_periode AND id_guru=$id_karyawan AND id_kriteria=$id_kriteria";
+        $query = "UPDATE pv_guru SET nilai=$pv WHERE id_periode=$id_periode AND id_guru=$id_guru AND id_kriteria=$id_kriteria";
     }
 
     $result = mysqli_query($koneksi, $query);
     if (!$result) {
-        echo "Gagal memasukkan / update nilai priority vector karyawan";
+        echo "Gagal memasukkan / update nilai priority vector guru";
         exit();
     }
 }
@@ -310,16 +311,16 @@ function inputDataPerbandinganKriteria($kriteria1, $kriteria2, $nilai, $nilai_ke
     }
 }
 
-// memasukkan bobot nilai perbandingan karyawan
-function inputDataPerbandinganGuru($karyawan1, $karyawan2, $pembanding, $nilai, $nilai_kepentingan, $id_periode)
+// memasukkan bobot nilai perbandingan guru
+function inputDataPerbandinganGuru($guru1, $guru2, $pembanding, $nilai, $nilai_kepentingan, $id_periode)
 {
     include('config.php');
 
-    $id_karyawan1 = getGuruID($karyawan1);
-    $id_karyawan2 = getGuruID($karyawan2);
+    $id_guru1 = getGuruID($guru1);
+    $id_guru2 = getGuruID($guru2);
     $id_pembanding = getKriteriaID($pembanding);
 
-    $query = "SELECT * FROM perbandingan_guru WHERE id_periode = $id_periode AND guru1 = $id_karyawan1 AND guru2 = $id_karyawan2 AND pembanding = $id_pembanding";
+    $query = "SELECT * FROM perbandingan_guru WHERE id_periode = $id_periode AND guru1 = $id_guru1 AND guru2 = $id_guru2 AND pembanding = $id_pembanding";
     $result = mysqli_query($koneksi, $query);
 
     if (!$result) {
@@ -327,14 +328,14 @@ function inputDataPerbandinganGuru($karyawan1, $karyawan2, $pembanding, $nilai, 
         exit();
     }
 
-    $penting = $nilai < 1 ? $id_karyawan2 : $id_karyawan1;
+    $penting = $nilai < 1 ? $id_guru2 : $id_guru1;
 
     // jika result kosong maka masukkan data baru
     // jika telah ada maka diupdate
     if (mysqli_num_rows($result) == 0) {
-        $query = "INSERT INTO perbandingan_guru (guru1,guru2,pembanding,penting,nilai_kepentingan,nilai,id_periode) VALUES ($id_karyawan1,$id_karyawan2,$id_pembanding,$penting,$nilai_kepentingan,$nilai,$id_periode)";
+        $query = "INSERT INTO perbandingan_guru (guru1,guru2,pembanding,penting,nilai_kepentingan,nilai,id_periode) VALUES ($id_guru1,$id_guru2,$id_pembanding,$penting,$nilai_kepentingan,$nilai,$id_periode)";
     } else {
-        $query = "UPDATE perbandingan_guru SET penting=$penting,nilai_kepentingan=$nilai_kepentingan,nilai=$nilai WHERE id_periode=$id_periode AND guru1=$id_karyawan1 AND guru2=$id_karyawan2 AND pembanding=$id_pembanding";
+        $query = "UPDATE perbandingan_guru SET penting=$penting,nilai_kepentingan=$nilai_kepentingan,nilai=$nilai WHERE id_periode=$id_periode AND guru1=$id_guru1 AND guru2=$id_guru2 AND pembanding=$id_pembanding";
     }
 
     $result = mysqli_query($koneksi, $query);
@@ -379,7 +380,7 @@ function getNilaiPerbandinganKriteria($kriteria1, $kriteria2, $id_periode)
     return $res;
 }
 
-// mencari nilai bobot perbandingan karyawan
+// mencari nilai bobot perbandingan guru
 function getNilaiPerbandinganGuru($guru1, $guru2, $pembanding, $id_periode)
 {
     include('config.php');
@@ -457,6 +458,84 @@ function getConsRatio($matrik_a, $matrik_b, $n)
     return $consratio;
 }
 
+//show diagram newest periode
+function showRankingDiagram()
+{
+
+    include('config.php');
+
+    $query = "SELECT guru.nama AS label, ranking.nilai AS y FROM guru,ranking WHERE ranking.id_periode=(SELECT max(id_periode) FROM ranking) AND guru.id = ranking.id_guru ORDER BY nilai DESC LIMIT 5";
+    $result = mysqli_query($koneksi, $query);
+
+    if (!$result) {
+        echo "Error koneksi database!!!";
+        exit();
+    }
+
+    $pilihan = array();
+    while ($row = mysqli_fetch_array($result)) {
+        $pilihan[] = array(
+            'y' => $row['y'],
+            'label' => $row['label'],
+        );
+    }
+
+    return $pilihan;
+}
+function RankingDiagramNullPeriode()
+{
+
+    include('config.php');
+
+    $query = "SELECT guru.nama AS label, ranking.nilai AS y FROM guru,ranking WHERE guru.id = ranking.id_guru ORDER BY nilai DESC LIMIT 5";
+    $result = mysqli_query($koneksi, $query);
+
+    if (!$result) {
+        echo "Error koneksi database!!!";
+        exit();
+    }
+
+    $pilihan = array();
+    while ($row = mysqli_fetch_array($result)) {
+        $pilihan[] = array(
+            'y' => 0,
+            'label' => $row['label'],
+        );
+    }
+
+    return $pilihan;
+}
+
+//show diagram per periode
+function RankingDiagramPeriode($id_periode)
+{
+
+    include('config.php');
+
+    $query = "SELECT guru.nama AS label, ranking.nilai AS y FROM guru,ranking WHERE ranking.id_periode=$id_periode AND guru.id = ranking.id_guru ORDER BY nilai DESC LIMIT 5";
+    $result = mysqli_query($koneksi, $query);
+
+    if (!$result) {
+        echo "Error koneksi database!!!";
+        exit();
+    }
+
+    $pilihan = array();
+    while ($row = mysqli_fetch_array($result)) {
+        $pilihan[] = array(
+            'y' => $row['y'],
+            'label' => $row['label'],
+        );
+    }
+
+    return $pilihan;
+}
+
+// function showRankingDiagramPeriode(){
+//     RankingDiagramPeriode($id_periode);
+// }
+
+
 // menampilkan tabel perbandingan bobot
 function showTabelPerbandingan($jenis, $kriteria, $id_periode)
 {
@@ -484,6 +563,8 @@ function showTabelPerbandingan($jenis, $kriteria, $id_periode)
         );
     }
 
+    // var_dump(json_encode($pilihan, JSON_NUMERIC_CHECK));
+    // die();
     // tampilkan tabel
 ?>
 

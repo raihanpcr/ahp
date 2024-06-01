@@ -16,6 +16,21 @@ if (isset($_SESSION['LOG_USER'])) {
                             <h2 class="card-title font-weight-bold mt-2">Profil SMAN 1 Bukit Batu</h2>
                         </div>
                         <div class="card-body">
+                            <div class="text-justify">
+                                <p>
+                                    SMA Negeri 1 Bukit Batu didirikan pertama kali pada tahun 1980 sebagai Sekolah Pemda Bengkalis dan masih menumpang di gedung SMP Negeri 1 Bukit Batu,
+                                    selanjutnya berpindah ke gedung SD Negeri 1 Sejangat selama satu tahun, kemudian didirikan secara mandiri pada tahun 1982,
+                                    SMA Pemda Bengkalis berubah status menjadi sekolah Negeri dan dinamai SMA Negeri 1 Sungai Pakning. Seiring dengan perkembangannya
+                                    SMA Negeri 1 Sungai Pakning berubah nama menjadi SMA Negeri 1 Bukit Batu sampai sekarang.
+                                </p>
+                                <p>
+                                    SMA Negeri 1 Bukit Batu senantiasa berupaya untuk terus berpacu mengejar prestasi dan mencapai kualitas lembaga pendidikan yang berkualitas, ini ditandai dengan banyaknya meraih berbagai macam keberhasilan baik secara kelembagaan maupun siswa secara individu diberbagai kegiatan.
+                                </p>
+                                <p>
+                                    SMA Negeri 1 Bukit Batu terus membenah diri untuk menjadi institusi yang bisa memberikan pelayanan pendidikan yang lebih baik kepada stakeholder yang ada, dan keseriusan ini dibuktikan dengan peningkatan berbagai fasilitas pendukung yang ada di sekolah ini dan terus menerus mengembangkan institusi menjadi sekolah unggulan di Kab. Bengkalis.
+                                </p>
+                            </div>
+                            
                             <div class="text-left">
 
                                 <h2 class="font-weight-bold">V I S I</h2>

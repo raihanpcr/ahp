@@ -35,3 +35,28 @@
 <script src="assets/template/js/plugins/bootstrap-notify.js"></script>
 <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="assets/template/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
+<script>
+      function periode() {
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                  animationEnabled: true,
+                  theme: "light2", // "light1", "light2", "dark1", "dark2"
+                  title: {
+                        text: "Ranking"
+                  },
+                  axisY: {
+                        title: "ranking"
+                  },
+                  data: [{
+                        type: "column",
+                        showInLegend: true,
+                        legendMarkerColor: "grey",
+                        legendText: "Nama Guru",
+                        dataPoints: <?php echo json_encode(showRankingDiagram(), JSON_NUMERIC_CHECK); ?>
+                  }]
+            });
+            chart.render();
+      }
+
+      window.onload = periode();
+</script>

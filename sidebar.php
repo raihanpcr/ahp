@@ -68,22 +68,31 @@
                         <p>Perbandingan Kriteria</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="bobot_periode.php?c=1">
-                        <i class="material-icons">folder_shared</i>
-                        <p>Perbandingan Guru</p>
-                    </a>
-                </li>
-                <?php
-                if (getJumlahKriteria() > 0) {
-                    for ($i = 0; $i <= (getJumlahKriteria() - 1); $i++) {
-                        echo "<li class='nav-item'>
+                <div class="dropdown">
+
+                    <li class="nav-item dropdown" data-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link" href="bobot_periode.php?c=1">
+                            <i class="material-icons">folder_shared</i>
+                            <p>Perbandingan Guru</p>
+                        </a>
+                    </li>
+
+                    <div class="dropdown-menu">
+                        <?php
+                        if (getJumlahKriteria() > 0) {
+                            for ($i = 0; $i <= (getJumlahKriteria() - 1); $i++) {
+                                echo "<li class='nav-item'>
                         <a class='nav-link' href='bobot_periode.php?c=" . ($i + 1) . "'>
                         <i class='material-icons'>chevron_right</i>" . getKriteriaNama($i) . "</a>
                         </li>";
-                    }
-                }
-                ?>
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+
+
+
                 <li class="nav-item">
                     <a class="nav-link" href="hasil_periode.php">
                         <i class="material-icons">check_box</i>
@@ -93,7 +102,26 @@
             <?php endif; ?>
         </ul>
 
+        <script type="text/javascript">
+            $(document).ready(function() {
+                //jquery for toggle sub menus
+                $('#sub-btn').click(function() {
+                    $(this).next('.sub-menu').slideToggle();
+                    $(this).find('.dropdown').toggleClass('rotate');
+                });
 
+                //jquery for expand and collapse the sidebar
+                $('.menu-btn').click(function() {
+                    $('.side-bar').addClass('active');
+                    $('.menu-btn').css("visibility", "hidden");
+                });
+
+                $('.close-btn').click(function() {
+                    $('.side-bar').removeClass('active');
+                    $('.menu-btn').css("visibility", "visible");
+                });
+            });
+        </script>
 
     </div>
 

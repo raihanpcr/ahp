@@ -47,7 +47,7 @@ include('header.php');
                                 <tbody>
 
                                     <?php
-                                    // Menampilkan list karyawan
+                                    // Menampilkan list guru
                                     $query = "SELECT id,nama FROM guru ORDER BY id";
                                     $result    = mysqli_query($koneksi, $query);
 

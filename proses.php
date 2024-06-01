@@ -91,7 +91,7 @@ if (isset($_POST['submit'])) {
         // nilai priority vektor
         $pv[$x] = $jmlmnk[$x] / $n;
 
-        // memasukkan nilai priority vektor ke dalam tabel pv_kriteria dan pv_karyawan
+        // memasukkan nilai priority vektor ke dalam tabel pv_kriteria dan pv_guru
         if ($jenis == 'kriteria') {
             $id_kriteria = getKriteriaID($x);
             inputKriteriaPV($id_kriteria, $pv[$x], $id_periode);

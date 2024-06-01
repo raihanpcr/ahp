@@ -17,45 +17,45 @@ $query = "SELECT * FROM ranking WHERE id_periode=$id_periode";
 $result = mysqli_query($koneksi, $query);
 
 // $jmlKriteria = getJumlahKriteria();
-// $jmlKaryawan = getJumlahGuru();
+// $jmlguru = getJumlahGuru();
 
 if (mysqli_num_rows($result) >= 0) {
     // menghitung perangkingan
     $jmlKriteria = getJumlahKriteria();
-    $jmlKaryawan = getJumlahGuru();
+    $jmlguru = getJumlahGuru();
     $nilai = array();
 
-    // mendapatkan nilai tiap karyawan
-    for ($x = 0; $x <= ($jmlKaryawan - 1); $x++) {
+    // mendapatkan nilai tiap guru
+    for ($x = 0; $x <= ($jmlguru - 1); $x++) {
         // inisialisasi
         $nilai[$x] = 0;
 
         for ($y = 0; $y <= ($jmlKriteria - 1); $y++) {
-            $id_karyawan = getGuruID($x);
+            $id_guru = getGuruID($x);
             $id_kriteria = getKriteriaID($y);
 
-            $pv_karyawan = getGuruPV($id_karyawan, $id_kriteria, $id_periode);
+            $pv_guru = getGuruPV($id_guru, $id_kriteria, $id_periode);
             $pv_kriteria = getKriteriaPV($id_kriteria, $id_periode);
 
             // echo "<pre>";
-            // echo $pv_karyawan . " guru<br>";
+            // echo $pv_guru . " guru<br>";
             // echo $pv_kriteria . " kriteria<br>";
-            // echo $id_karyawan . "<br>";
+            // echo $id_guru . "<br>";
             // echo $id_kriteria;
             // echo "</pre>";
 
-            $nilai[$x] += ($pv_karyawan * $pv_kriteria);
+            $nilai[$x] += ($pv_guru * $pv_kriteria);
         }
     }
 
     // echo "<pre>";
-    // var_dump($pv_karyawan, $pv_kriteria);
+    // var_dump($pv_guru, $pv_kriteria);
     // die();
     // echo "</pre>";
 
     // update nilai ranking
 
-    for ($i = 0; $i <= ($jmlKaryawan - 1); $i++) {
+    for ($i = 0; $i <= ($jmlguru - 1); $i++) {
         $id_guru = getGuruID($i);
 
         $query = "SELECT * FROM ranking WHERE id_guru=$id_guru AND id_periode=$id_periode";
@@ -82,16 +82,16 @@ if (mysqli_num_rows($result) >= 0) {
         }
     }
 
-    // for ($i = 0; $i <= ($jmlKaryawan - 1); $i++) {
-    //     $id_karyawan = getGuruID($i);
+    // for ($i = 0; $i <= ($jmlguru - 1); $i++) {
+    //     $id_guru = getGuruID($i);
 
-    //     $query = "SELECT * FROM ranking WHERE id_karyawan=$id_karyawan AND id_periode=$id_periode";
+    //     $query = "SELECT * FROM ranking WHERE id_guru=$id_guru AND id_periode=$id_periode";
     //     $result = mysqli_query($koneksi, $query);
 
     //     if (mysqli_num_rows($result) == 0) {
-    //         $query2 = "INSERT INTO ranking (id_karyawan, nilai, id_periode) VALUES ($id_karyawan, $nilai[$i], $id_periode)";
+    //         $query2 = "INSERT INTO ranking (id_guru, nilai, id_periode) VALUES ($id_guru, $nilai[$i], $id_periode)";
     //     } else {
-    //         $query2 = "UPDATE ranking SET nilai=$nilai[$i] WHERE id_karyawan=$id_karyawan AND id_periode=$id_periode";
+    //         $query2 = "UPDATE ranking SET nilai=$nilai[$i] WHERE id_guru=$id_guru AND id_periode=$id_periode";
     //     }
 
     //     $result = mysqli_query($koneksi, $query2);
@@ -103,7 +103,7 @@ if (mysqli_num_rows($result) >= 0) {
 }
 
 // echo "<pre>";
-// var_dump($jmlKaryawan, $jmlKriteria);
+// var_dump($jmlguru, $jmlKriteria);
 // die();
 // echo "</pre>";
 
@@ -164,7 +164,7 @@ include('header.php');
                                     <tr>
                                         <th colspan="2">Total</th>
                                         <?php
-                                        for ($i = 0; $i <= ($jmlKaryawan - 1); $i++) {
+                                        for ($i = 0; $i <= ($jmlguru - 1); $i++) {
                                             echo "<th>" . round($nilai[$i], 5) . "</th>";
                                         }
                                         ?>
