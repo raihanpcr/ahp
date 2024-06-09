@@ -37,7 +37,7 @@ if (isset($_SESSION['LOG_USER'])) {
                         </div>
                         <div class="card-body">
                             <div class="text-left">
-                                <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+                                <div id="chartContainer" style="height: 300px;"></div>
                             </div>
                         </div>
                     </div>
