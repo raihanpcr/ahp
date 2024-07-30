@@ -1,21 +1,17 @@
 <?php
 include('config.php');
 
-$error = '';
-if (isset($_POST['login'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $q = mysqli_query($koneksi, "select * from user where username='$username' and password='$password'");
-    if (mysqli_num_rows($q) == 0) {
-        $error = 'Username dan password salah';
-    }
-    if (empty($error)) {
-        $r = mysqli_fetch_array($q);
-        $_SESSION['LOG_USER'] = $r['id'];
-        $_SESSION['LOG_ROLE'] = $r['role'];
-        $_SESSION['LOG_NAMA'] = $r['nama_lengkap'];
-        header('location:index.php');
-    }
+include('fungsi.php');
+
+if (isset($_POST['regis'])) {
+    $nama_lengkap = $_POST['nama_lengkap'];
+    $username1 = $_POST['nis'];
+    $password1 = $_POST['password'];
+    $role = "Siswa";
+
+    tambahUser($nama_lengkap, $username1, $password1, $role);
+
+    header('Location: login.php');
 }
 
 include('header_login.php');
@@ -28,7 +24,7 @@ include('header_login.php');
                 <div class="card card-signin my-5" style="border-radius: 20px">
                     <img src="assets/images/sman_assets.png" class="rounded mx-auto d-block mt-5">
                     <div class="card-body">
-                        <h5 class="card-title text-center mt-3">L O G I N</h5>
+                        <h5 class="card-title text-center mt-3">Registrasi Siswa</h5>
                         <hr>
                         <div class="text-center mt-4">
                             <?php
@@ -39,19 +35,24 @@ include('header_login.php');
                         </div>
                         <form method="post" action="" class="form-signin">
                             <div class="form-label-group">
-                                <label for="username">Username</label>
-                                <input type="text" id="username" name="username" class="form-control" required autofocus>
+                                <label for="username">NIS</label>
+                                <input type="text" id="nis" name="nis" class="form-control" required autofocus>
+                            </div>
+
+                            <div class="form-label-group">
+                                <label for="username">Nama Siswa</label>
+                                <input type="text" id="nama_lengkap" name="nama_lengkap" class="form-control" required autofocus>
                             </div>
 
                             <div class="form-label-group mb-3">
                                 <label for="password">Password</label>
                                 <input type="password" id="password" name="password" class="form-control" required>
                             </div>
-
-                            <button class="btn btn-lg btn-info btn-block " type="submit" name="login">Masuk</button>
+                            <br>
+                            <button class="btn btn-lg btn-info btn-block " type="submit" name="regis">Registrasi</button>
                         </form>
                         <div class="text-center">
-                            Belum Punya Akun ? <a href="siswa_regis.php">Daftar</a>
+                            Sudah Punya Akun ? <a href="login.php">Login</a>
                         </div>
                     </div>
                 </div>

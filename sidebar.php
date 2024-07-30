@@ -35,12 +35,7 @@
                         <p>Kriteria</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="guru.php">
-                        <i class="material-icons">assignment_ind</i>
-                        <p>Guru</p>
-                    </a>
-                </li>
+                
                 <li class="nav-item">
                     <a class="nav-link" href="user.php">
                         <i class="material-icons">person</i>
@@ -63,11 +58,29 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="guru.php">
+                        <i class="material-icons">assignment_ind</i>
+                        <p>Guru</p>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
                     <a class="nav-link" href="bobot_kriteria_periode.php">
                         <i class="material-icons">folder_shared</i>
                         <p>Perbandingan Kriteria</p>
                     </a>
                 </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link" href="hasil_periode.php">
+                        <i class="material-icons">check_box</i>
+                        <p>Hasil</p>
+                    </a>
+                </li>
+
+            <?php elseif ($_SESSION['LOG_ROLE'] == 'Siswa') : ?>
+                
                 <div class="dropdown">
 
                     <li class="nav-item dropdown" data-toggle="dropdown" aria-expanded="false">
@@ -90,15 +103,6 @@
                         ?>
                     </div>
                 </div>
-
-
-
-                <li class="nav-item">
-                    <a class="nav-link" href="hasil_periode.php">
-                        <i class="material-icons">check_box</i>
-                        <p>Hasil</p>
-                    </a>
-                </li>
             <?php endif; ?>
         </ul>
 
