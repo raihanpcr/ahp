@@ -41,6 +41,7 @@ include('header.php');
                                 <thead>
                                     <tr>
                                         <th>No</th>
+                                        <th colspan="2">NIP</th>
                                         <th colspan="2">Nama Guru</th>
                                     </tr>
                                 </thead>
@@ -48,7 +49,7 @@ include('header.php');
 
                                     <?php
                                     // Menampilkan list guru
-                                    $query = "SELECT id,nama FROM guru ORDER BY id";
+                                    $query = "SELECT id,nama,nis FROM guru ORDER BY nis ";
                                     $result    = mysqli_query($koneksi, $query);
 
                                     $i = 0;
@@ -57,6 +58,7 @@ include('header.php');
                                     ?>
                                         <tr>
                                             <td><?php echo $i ?></td>
+                                            <td><?php echo $row['nis'] ?></td>
                                             <td><?php echo $row['nama'] ?></td>
                                             <td>
                                                 <form method="post" action="guru.php">
@@ -66,9 +68,7 @@ include('header.php');
                                                 </form>
                                             </td>
                                         </tr>
-
                                     <?php } ?>
-
                                 </tbody>
                             </table>
                         </div>

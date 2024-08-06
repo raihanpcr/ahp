@@ -11,8 +11,13 @@ if (isset($_GET['jenis'])) {
 if (isset($_POST['tambah'])) {
     $jenis    = $_POST['jenis'];
     $nama     = $_POST['nama'];
+    $nis      = $_POST['nis'];
+    if ($jenis == 'Guru') {
+        tambahDataGuru($jenis, $nama, $nis);
+    }else{
+        tambahData($jenis, $nama);
+    }
 
-    tambahData($jenis, $nama);
 
     header('Location: ' . $jenis . '.php');
 }
@@ -30,6 +35,13 @@ include('header.php');
                     </div>
                     <div class="card-body">
                         <form method="post" action="tambah.php">
+                            <?php if ($jenis == 'Guru') { ?>
+                                <div class="form-group">
+                                    <label>Nis <?php echo $jenis ?></label>
+                                    <input type="text" name="nis" class="form-control" required>
+                                </div>
+                            <?php } ?>
+                            
                             <div class="form-group">
                                 <label>Nama <?php echo $jenis ?></label>
                                 <input type="text" name="nama" class="form-control" required>

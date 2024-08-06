@@ -114,6 +114,20 @@ function getJumlahKriteria()
 }
 
 // menambah data kriteria / guru
+
+function tambahDataGuru($tabel, $nama, $nis)
+{
+    include('config.php');
+
+    $query = "INSERT INTO $tabel (nama, nis) VALUES ('$nama','$nis')";
+    $tambah = mysqli_query($koneksi, $query);
+
+    if (!$tambah) {
+        echo "Gagal menambah data" . $tabel;
+        exit();
+    }
+}
+
 function tambahData($tabel, $nama)
 {
     include('config.php');
