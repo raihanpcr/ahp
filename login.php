@@ -39,7 +39,7 @@ include('header_login.php');
                         </div>
                         <form method="post" action="" class="form-signin">
                             <div class="form-label-group">
-                                <label for="username">Username</label>
+                                <label for="username">Username / NIS</label>
                                 <input type="text" id="username" name="username" class="form-control" required autofocus>
                             </div>
 

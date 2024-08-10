@@ -56,11 +56,11 @@ function getGuruNama($no_urut)
     return $nama[($no_urut)];
 }
 
-// mencari priority vector guru
+// TODO : mencari priority vector guru
 function getGuruPV($id_guru, $id_kriteria, $id_periode)
 {
     include('config.php');
-    $query = "SELECT nilai FROM pv_guru WHERE id_periode=$id_periode AND id_guru=$id_guru AND id_kriteria=$id_kriteria";
+    $query = "SELECT sum(nilai)/COUNT(id_user) AS nilai FROM pv_guru WHERE id_periode=$id_periode AND id_guru=$id_guru AND id_kriteria=$id_kriteria";
     $result = mysqli_query($koneksi, $query);
 
     $pv = 0;
@@ -264,11 +264,11 @@ function inputKriteriaPV($id_kriteria, $pv, $id_periode)
 }
 
 // memasukkan nilai priority vektor guru
-function inputGuruPV($id_guru, $id_kriteria, $pv, $id_periode)
+function inputGuruPV($id_guru, $id_kriteria, $pv, $id_periode,$user)
 {
     include('config.php');
 
-    $query = "SELECT * FROM pv_guru WHERE id_periode = $id_periode AND id_guru = $id_guru AND id_kriteria = $id_kriteria";
+    $query = "SELECT * FROM pv_guru WHERE id_periode = $id_periode AND id_guru = $id_guru AND id_kriteria = $id_kriteria AND id_user=$user";
     $result = mysqli_query($koneksi, $query);
 
     if (!$result) {
@@ -279,9 +279,10 @@ function inputGuruPV($id_guru, $id_kriteria, $pv, $id_periode)
     // jika result kosong maka masukkan data baru
     // jika telah ada maka diupdate
     if (mysqli_num_rows($result) == 0) {
-        $query = "INSERT INTO pv_guru (id_guru,id_kriteria,nilai,id_periode) VALUES ($id_guru,$id_kriteria,$pv,$id_periode)";
+        //TODO : Masukkan data ke pv_guru
+        $query = "INSERT INTO pv_guru (id_guru,id_kriteria,nilai,id_periode,id_user) VALUES ($id_guru,$id_kriteria,$pv,$id_periode, $user)";
     } else {
-        $query = "UPDATE pv_guru SET nilai=$pv WHERE id_periode=$id_periode AND id_guru=$id_guru AND id_kriteria=$id_kriteria";
+        $query = "UPDATE pv_guru SET nilai=$pv WHERE id_periode=$id_periode AND id_guru=$id_guru AND id_kriteria=$id_kriteria AND id_user=$user";
     }
 
     $result = mysqli_query($koneksi, $query);
@@ -326,7 +327,7 @@ function inputDataPerbandinganKriteria($kriteria1, $kriteria2, $nilai, $nilai_ke
 }
 
 // memasukkan bobot nilai perbandingan guru
-function inputDataPerbandinganGuru($guru1, $guru2, $pembanding, $nilai, $nilai_kepentingan, $id_periode)
+function inputDataPerbandinganGuru($guru1, $guru2, $pembanding, $nilai, $nilai_kepentingan, $id_periode, $user)
 {
     include('config.php');
 
@@ -334,7 +335,7 @@ function inputDataPerbandinganGuru($guru1, $guru2, $pembanding, $nilai, $nilai_k
     $id_guru2 = getGuruID($guru2);
     $id_pembanding = getKriteriaID($pembanding);
 
-    $query = "SELECT * FROM perbandingan_guru WHERE id_periode = $id_periode AND guru1 = $id_guru1 AND guru2 = $id_guru2 AND pembanding = $id_pembanding";
+    $query = "SELECT * FROM perbandingan_guru WHERE id_periode = $id_periode AND guru1 = $id_guru1 AND guru2 = $id_guru2 AND pembanding = $id_pembanding AND id_user = $user";
     $result = mysqli_query($koneksi, $query);
 
     if (!$result) {
@@ -347,9 +348,9 @@ function inputDataPerbandinganGuru($guru1, $guru2, $pembanding, $nilai, $nilai_k
     // jika result kosong maka masukkan data baru
     // jika telah ada maka diupdate
     if (mysqli_num_rows($result) == 0) {
-        $query = "INSERT INTO perbandingan_guru (guru1,guru2,pembanding,penting,nilai_kepentingan,nilai,id_periode) VALUES ($id_guru1,$id_guru2,$id_pembanding,$penting,$nilai_kepentingan,$nilai,$id_periode)";
+        $query = "INSERT INTO perbandingan_guru (guru1,guru2,pembanding,penting,nilai_kepentingan,nilai,id_periode,id_user) VALUES ($id_guru1,$id_guru2,$id_pembanding,$penting,$nilai_kepentingan,$nilai,$id_periode, $user)";
     } else {
-        $query = "UPDATE perbandingan_guru SET penting=$penting,nilai_kepentingan=$nilai_kepentingan,nilai=$nilai WHERE id_periode=$id_periode AND guru1=$id_guru1 AND guru2=$id_guru2 AND pembanding=$id_pembanding";
+        $query = "UPDATE perbandingan_guru SET penting=$penting,nilai_kepentingan=$nilai_kepentingan,nilai=$nilai WHERE id_periode=$id_periode AND guru1=$id_guru1 AND guru2=$id_guru2 AND pembanding=$id_pembanding AND id_user=$user";
     }
 
     $result = mysqli_query($koneksi, $query);
@@ -395,15 +396,17 @@ function getNilaiPerbandinganKriteria($kriteria1, $kriteria2, $id_periode)
 }
 
 // mencari nilai bobot perbandingan guru
-function getNilaiPerbandinganGuru($guru1, $guru2, $pembanding, $id_periode)
+function getNilaiPerbandinganGuru($guru1, $guru2, $pembanding, $id_periode, $user)
 {
+    // var_dump( $_SESSION['LOG_USER'] );
+    // die();
     include('config.php');
 
     $id_guru1 = getGuruID($guru1);
     $id_guru2 = getGuruID($guru2);
     $id_pembanding = getKriteriaID($pembanding);
 
-    $query = "SELECT * FROM perbandingan_guru WHERE id_periode = $id_periode AND guru1 = $id_guru1 AND guru2 = $id_guru2 AND pembanding = $id_pembanding";
+    $query = "SELECT * FROM perbandingan_guru WHERE id_periode = $id_periode AND guru1 = $id_guru1 AND guru2 = $id_guru2 AND pembanding = $id_pembanding AND id_user=$user";
     $result = mysqli_query($koneksi, $query);
 
     if (!$result) {
@@ -586,8 +589,9 @@ function showTabelPerbandingan($jenis, $kriteria, $id_periode)
         <table class="table">
             <thead>
                 <tr>
-                    <th colspan="2">pilih yang lebih penting</th>
-                    <th>nilai perbandingan</th>
+                    <th colspan="2">Pilih yang Lebih Penting</th>
+                    <th>Nilai Perbandingan</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -595,7 +599,7 @@ function showTabelPerbandingan($jenis, $kriteria, $id_periode)
 
                 //inisialisasi
                 $urut = 0;
-
+                $pengguna = $_SESSION['LOG_USER'];
                 for ($x = 0; $x <= ($n - 2); $x++) {
                     for ($y = ($x + 1); $y <= ($n - 1); $y++) {
                         $urut++;
@@ -606,19 +610,20 @@ function showTabelPerbandingan($jenis, $kriteria, $id_periode)
                             $checked1 = $penting == $pilihan[$x]['id'] ? 'checked' : '';
                             $checked2 = $penting == $pilihan[$y]['id'] ? 'checked' : '';
                         } else {
-                            $res = getNilaiPerbandinganGuru($x, $y, ($jenis - 1), $id_periode);
+                            $res = getNilaiPerbandinganGuru($x, $y, ($jenis - 1), $id_periode, $pengguna);
                             $penting = $res['penting'];
                             $nilai_kepentingan = $res['nilai_kepentingan'];
                             $checked1 = $penting == $pilihan[$x]['id'] ? 'checked' : '';
                             $checked2 = $penting == $pilihan[$y]['id'] ? 'checked' : '';
                         }
                 ?>
+            
                         <tr>
                             <td>
                                 <div>
                                     <div class="form-group">
+
                                         <input name="pilih<?php echo $urut ?>" value="1" <?php echo $checked1; ?> class="hidden" type="radio" required>
-                                        <!-- nampilin nama guru -> $pilihan[$x]['nama'] -->
                                         <label><?php echo $pilihan[$x]['nama']; ?></label>
 
                                     </div>
@@ -634,17 +639,18 @@ function showTabelPerbandingan($jenis, $kriteria, $id_periode)
                                 </div>
                             </td>
                             <td width="350">
+                                
                                 <div>
                                     <select class="form-control" name="bobot<?php echo $urut ?>">
-                                        <option value="1" <?php echo $nilai_kepentingan == 1 ? 'selected' : '' ?>>1 - Sama pentingnya</option>
-                                        <option value="2" <?php echo $nilai_kepentingan == 2 ? 'selected' : '' ?>>2 - Sama hingga sedikit lebih penting</option>
-                                        <option value="3" <?php echo $nilai_kepentingan == 3 ? 'selected' : '' ?>>3 - Sedikit lebih penting</option>
-                                        <option value="4" <?php echo $nilai_kepentingan == 4 ? 'selected' : '' ?>>4 - Sedikit lebih hingga jelas lebih penting</option>
-                                        <option value="5" <?php echo $nilai_kepentingan == 5 ? 'selected' : '' ?>>5 - Jelas lebih penting</option>
-                                        <option value="6" <?php echo $nilai_kepentingan == 6 ? 'selected' : '' ?>>6 - Jelas hingga sangat jelas lebih penting</option>
-                                        <option value="7" <?php echo $nilai_kepentingan == 7 ? 'selected' : '' ?>>7 - Sangat jelas lebih penting</option>
-                                        <option value="8" <?php echo $nilai_kepentingan == 8 ? 'selected' : '' ?>>8 - Sangat jelas hingga mutlak lebih penting</option>
-                                        <option value="9" <?php echo $nilai_kepentingan == 9 ? 'selected' : '' ?>>9 - Mutlak lebih penting</option>
+                                        <option value="1" <?php echo $nilai_kepentingan == 1 ? 'selected' : '' ?> >1 - Sama pentingnya</option>
+                                        <option value="2" <?php echo $nilai_kepentingan == 2 ? 'selected' : '' ?> >2 - Sama hingga sedikit lebih penting</option>
+                                        <option value="3" <?php echo $nilai_kepentingan == 3 ? 'selected' : '' ?> >3 - Sedikit lebih penting</option>
+                                        <option value="4" <?php echo $nilai_kepentingan == 4 ? 'selected' : '' ?> >4 - Sedikit lebih hingga jelas lebih penting</option>
+                                        <option value="5" <?php echo $nilai_kepentingan == 5 ? 'selected' : '' ?> >5 - Jelas lebih penting</option>
+                                        <option value="6" <?php echo $nilai_kepentingan == 6 ? 'selected' : '' ?> >6 - Jelas hingga sangat jelas lebih penting</option>
+                                        <option value="7" <?php echo $nilai_kepentingan == 7 ? 'selected' : '' ?> >7 - Sangat jelas lebih penting</option>
+                                        <option value="8" <?php echo $nilai_kepentingan == 8 ? 'selected' : '' ?> >8 - Sangat jelas hingga mutlak lebih penting</option>
+                                        <option value="9" <?php echo $nilai_kepentingan == 9 ? 'selected' : '' ?> >9 - Mutlak lebih penting</option>
                                     </select>
                                 </div>
                             </td>
@@ -655,8 +661,10 @@ function showTabelPerbandingan($jenis, $kriteria, $id_periode)
                 ?>
             </tbody>
         </table>
+        
         <input type="text" name="jenis" value="<?php echo $jenis; ?>" hidden>
         <input type="text" name="id_periode" value="<?php echo $id_periode; ?>" hidden>
+        <input type="text" name="pengguna" value="<?= $_SESSION['LOG_USER'] ?>" hidden>
         <br><br><input class="btn btn-info" type="submit" name="submit" value="SIMPAN">
     </form>
 

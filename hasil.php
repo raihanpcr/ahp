@@ -67,7 +67,9 @@ if (mysqli_num_rows($result) >= 0) {
             exit();
         }
 
+       
         // Menggunakan mysqli_num_rows hanya jika $result adalah objek mysqli_result
+        // TODO : Masukkan data ranking
         if (mysqli_num_rows($result) == 0) {
             $query2 = "INSERT INTO ranking (id_guru, nilai, id_periode) VALUES ($id_guru, $nilai[$i], $id_periode)";
         } else {
@@ -82,24 +84,7 @@ if (mysqli_num_rows($result) >= 0) {
         }
     }
 
-    // for ($i = 0; $i <= ($jmlguru - 1); $i++) {
-    //     $id_guru = getGuruID($i);
-
-    //     $query = "SELECT * FROM ranking WHERE id_guru=$id_guru AND id_periode=$id_periode";
-    //     $result = mysqli_query($koneksi, $query);
-
-    //     if (mysqli_num_rows($result) == 0) {
-    //         $query2 = "INSERT INTO ranking (id_guru, nilai, id_periode) VALUES ($id_guru, $nilai[$i], $id_periode)";
-    //     } else {
-    //         $query2 = "UPDATE ranking SET nilai=$nilai[$i] WHERE id_guru=$id_guru AND id_periode=$id_periode";
-    //     }
-
-    //     $result = mysqli_query($koneksi, $query2);
-    //     if (!$result) {
-    //         echo "Gagal mengupdate ranking";
-    //         exit();
-    //     }
-    // }
+    
 }
 
 // echo "<pre>";
@@ -121,97 +106,57 @@ include('header.php');
                     <div class="card-body">
                         <a href="hasil_periode.php" class="btn btn-default">Kembali</a>
                         <?php
-                        $query = "SELECT * FROM ranking WHERE id_periode=$id_periode";
-                        $result = mysqli_query($koneksi, $query);
-                        if (mysqli_num_rows($result) == 0) {
-                        ?>
+                            $query = "SELECT * FROM ranking WHERE id_periode=$id_periode";
+                            $result = mysqli_query($koneksi, $query);
 
-                            <div class="alert alert-danger">
-                                Tidak ada data hasil perhitungan pada periode tersebut
-                            </div>
-                        <?php } else { ?>
-                            <!--<table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Overall Composite Height</th>
-                                        <th>Priority Vector (rata-rata)</th>
-                                        <?php
-                                        echo "fira test";
-                                        for ($i = 0; $i <= (getJumlahGuru() - 1); $i++) {
-                                            echo "<th>" . getGuruNama($i) . "</th>\n";
-                                        }
-                                        ?>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    <?php
-                                    for ($x = 0; $x <= (getJumlahKriteria() - 1); $x++) {
-                                        echo "<tr>";
-                                        echo "<td>" . getKriteriaNama($x) . "</td>";
-                                        echo "<td>" . round(getKriteriaPV(getKriteriaID($x), $id_periode), 5) . "</td>";
-
-                                        for ($y = 0; $y <= (getJumlahGuru() - 1); $y++) {
-                                            echo "<td>" . round(getGuruPV(getGuruID($y), getKriteriaID($x), $id_periode), 5) . "</td>";
-                                        }
-
-                                        echo "</tr>";
-                                    }
-                                    ?>
-                                </tbody>
-
-                                <tfoot>
-                                    <tr>
-                                        <th colspan="2">Total</th>
-                                        <?php
-                                        for ($i = 0; $i <= ($jmlguru - 1); $i++) {
-                                            echo "<th>" . round($nilai[$i], 5) . "</th>";
-                                        }
-                                        ?>
-                                    </tr>
-                                </tfoot>
-
-                            </table>-->
-
-                            <h2>Perangkingan</h2>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Peringkat</th>
-                                        <th>Guru</th>
-                                        <th>Nilai</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $query  = "SELECT * FROM guru,ranking WHERE ranking.id_periode=$id_periode AND guru.id = ranking.id_guru ORDER BY nilai DESC";
-                                    $result = mysqli_query($koneksi, $query);
-
-                                    $i = 0;
-                                    while ($row = mysqli_fetch_array($result)) {
-                                        $i++;
-                                    ?>
+                            // Check if there are results
+                            if (mysqli_num_rows($result) == 0) {
+                            ?>
+                                <div class="alert alert-danger">
+                                    Tidak ada data hasil perhitungan pada periode tersebut
+                                </div>
+                            <?php 
+                            } else { 
+                                // Uncommented table rendering logic
+                            ?>
+                                <h2>Perangkingan</h2>
+                                <table class="table">
+                                    <thead>
                                         <tr>
-                                            <?php if ($i == 1) {
-                                                echo "<td>1</td>";
-                                            } else {
-                                                echo "<td>" . $i . "</td>";
-                                            }
-
-                                            ?>
-
-                                            <td><?php echo $row['nama'] ?></td>
-                                            <td><?php echo $row['nilai'] ?></td>
+                                            <th>Peringkat</th>
+                                            <th>Guru</th>
+                                            <th>Nilai</th>
                                         </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $query  = "SELECT * FROM guru,ranking WHERE ranking.id_periode=$id_periode AND guru.id = ranking.id_guru ORDER BY nilai DESC";
+                                        $result = mysqli_query($koneksi, $query);
 
-                                    <?php
-                                    }
+                                        $i = 0;
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            $i++;
+                                        ?>
+                                            <tr>
+                                                <?php 
+                                                if ($i == 1) {
+                                                    echo "<td>1</td>";
+                                                } else {
+                                                    echo "<td>" . $i . "</td>";
+                                                } 
+                                                ?>
+                                                <td><?php echo $row['nama'] ?></td>
+                                                <td><?php echo $row['nilai'] ?></td>
+                                            </tr>
 
-
-                                    ?>
-                                </tbody>
-                            </table>
-                        <?php } ?>
+                                        <?php
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            <?php 
+                            } 
+                            ?>
                     </div>
                 </div>
             </div>

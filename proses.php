@@ -6,6 +6,7 @@ include('fungsi.php');
 if (isset($_POST['submit'])) {
     $jenis = $_POST['jenis'];
     $id_periode = $_POST['id_periode'];
+    $user = $_POST['pengguna'];
     $query = "SELECT * FROM periode WHERE id=$id_periode";
     $result = mysqli_query($koneksi, $query);
     $periode = mysqli_fetch_array($result);
@@ -46,7 +47,9 @@ if (isset($_POST['submit'])) {
             if ($jenis == 'kriteria') {
                 inputDataPerbandinganKriteria($x, $y, $matrik[$x][$y], $_POST[$bobot], $id_periode);
             } else {
-                inputDataPerbandinganGuru($x, $y, ($jenis - 1), $matrik[$x][$y], $_POST[$bobot], $id_periode);
+                // var_dump($user);
+                // die();
+                inputDataPerbandinganGuru($x, $y, ($jenis - 1), $matrik[$x][$y], $_POST[$bobot], $id_periode, $user);
             }
         }
     }
@@ -98,7 +101,7 @@ if (isset($_POST['submit'])) {
         } else {
             $id_kriteria = getKriteriaID($jenis - 1);
             $id_guru = getGuruID($x);
-            inputGuruPV($id_guru, $id_kriteria, $pv[$x], $id_periode);
+            inputGuruPV($id_guru, $id_kriteria, $pv[$x], $id_periode, $user);
         }
     }
 
